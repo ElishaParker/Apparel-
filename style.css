@@ -8,13 +8,36 @@ body {
 }
 
 #canvasContainer {
-    border: 1px solid #ccc;
-    margin-top: 20px;
+    border: 2px solid black;
     position: relative;
     width: 800px;
     height: 600px;
+    overflow: hidden;
 }
 
 canvas {
     border: 1px solid #000;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.resize-handle {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: black;
+    cursor: se-resize;
+}
+
+.resize-handle-top {
+    top: -5px;
+    left: 50%;
+    margin-left: -5px;
+}
+
+.resize-handle-right {
+    right: -5px;
+    top: 50%;
+    margin-top: -5px;
 }
