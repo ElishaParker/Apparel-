@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pro Apparel Designer</title>
+    <title>Pro Apparel Designer - Multi-Layer</title>
     <link rel="stylesheet" href="style.css">
-    <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
@@ -14,7 +13,7 @@
         <h1><i class="fa-solid fa-shirt"></i> StyleStudio Designer</h1>
         <div class="header-actions">
             <button id="exportBtn" class="btn btn-primary" title="Download Design">
-                <i class="fa-solid fa-download"></i> Download
+                <i class="fa-solid fa-download"></i> Export PNG
             </button>
         </div>
     </div>
@@ -23,43 +22,56 @@
         <!-- Sidebar Controls -->
         <aside class="sidebar">
             
-            <!-- Upload Section -->
+            <!-- Main Upload -->
             <div class="control-group">
-                <h3><i class="fa-solid fa-upload"></i> Upload Logo</h3>
+                <h3><i class="fa-solid fa-plus"></i> Add New Layer</h3>
                 <div class="upload-area" id="dropZone">
                     <i class="fa-solid fa-cloud-arrow-up fa-2x"></i>
-                    <p>Drag & Drop or Click to Upload</p>
+                    <p>Drag & Drop Image or Click to Upload</p>
                     <input type="file" id="imageUpload" accept="image/*">
                 </div>
+                <p class="info-text" style="font-size: 0.8rem; margin-top: 10px;">Tip: Use PNGs with transparent backgrounds for best results.</p>
             </div>
 
-            <!-- Properties Section -->
-            <div class="control-group" id="propertiesPanel" style="display: none;">
-                <h3><i class="fa-solid fa-sliders"></i> Properties</h3>
-                
+            <!-- Layer Management Panel -->
+            <div class="control-group" style="flex: 1; display: flex; flex-direction: column;">
+                <h3><i class="fa-solid fa-layer-group"></i> Layers <span id="layerCount" class="badge">0</span></h3>
+                <div id="layerList" class="layer-list">
+                    <!-- Layers will be injected here via JS -->
+                    <div class="empty-layer-msg">No layers added yet. Upload an image to start.</div>
+                </div>
+            </div>
+
+            <!-- Active Layer Properties (Updates dynamically) -->
+            <div class="control-group" id="activeLayerProps" style="display: none;">
+                <h3><i class="fa-solid fa-sliders"></i> Selected Layer</h3>
+                <div class="property-row">
+                    <label>Opacity</label>
+                    <input type="range" id="layerOpacitySlider" min="0" max="1" step="0.05" value="1">
+                </div>
                 <div class="property-row">
                     <label>Scale</label>
-                    <input type="range" id="scaleSlider" min="0.1" max="3" step="0.1" value="1">
-                    <span id="scaleValue">100%</span>
+                    <input type="range" id="layerScaleSlider" min="0.1" max="5" step="0.1" value="1">
                 </div>
-
-                <div class="property-row">
-                    <label>Rotation</label>
-                    <input type="range" id="rotateSlider" min="0" max="360" step="1" value="0">
-                    <span id="rotateValue">0°</span>
-                </div>
-
                 <div class="btn-group">
-                    <button id="btnBringFront" class="btn btn-secondary"><i class="fa-solid fa-arrow-up"></i> Front</button>
-                    <button id="btnSendBack" class="btn btn-secondary"><i class="fa-solid fa-arrow-down"></i> Back</button>
+                    <button id="btnMoveUp" class="btn btn-secondary"><i class="fa-solid fa-arrow-up"></i> Move Up</button>
+                    <button id="btnMoveDown" class="btn btn-secondary"><i class="fa-solid fa-arrow-down"></i> Move Down</button>
+                </div>
+                <div class="btn-group" style="margin-top: 10px;">
+                    <button id="btnDeleteLayer" class="btn" style="background-color: #ef4444; color: white;">Delete Layer</button>
                 </div>
             </div>
 
+            <!-- Global Canvas Properties -->
             <div class="control-group" style="margin-top: auto;">
-                <p class="info-text">Tips: <br>
-                • Drag Logo to move <br>
-                • Scroll to Zoom <br>
-                • Hold Space + Drag to Pan</p>
+                <h3><i class="fa-solid fa-globe"></i> Canvas View</h3>
+                <div class="property-row">
+                    <label>Canvas Zoom</label>
+                    <input type="range" id="globalZoomSlider" min="0.1" max="3" step="0.1" value="1">
+                </div>
+                <div class="btn-group">
+                    <button id="btnResetView" class="btn btn-secondary">Reset View</button>
+                </div>
             </div>
         </aside>
 
@@ -77,6 +89,10 @@
                     <button id="toolSelect" class="tool-btn" title="Select Tool">
                         <i class="fa-solid fa-pointer"></i>
                     </button>
+                </div>
+                
+                <div class="status-bar">
+                    <span id="statusMessage">Ready</span>
                 </div>
             </div>
         </main>
